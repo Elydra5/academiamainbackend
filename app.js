@@ -19,7 +19,7 @@ const port = 3000
 
 app.use(cors())
 app.use(express.json())
-app.use(bodyparser)
+app.use(bodyparser.json())
 
 app.get('/', (req, res) => {
     res.send('Version 1.0!')
