@@ -1,6 +1,0 @@
-HOST=localhost
-DB_PORT=3306
-DB_USER=root
-PASS=
-DB=academiamainerasmus
-JWT_SECRET=jf@36>xY0+Faszzc_Bbu72Wp_6G!IgE7jI9W<C0cig
