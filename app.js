@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 const bodyparser = require('body-parser')
 
 const authRouter = require('./routes/auth')
-const adminRouter = require('./routes/auth')
+const adminRouter = require('./routes/admin')
 const studentRouter = require('./routes/student')
 const attendanceRouter = require('./routes/attendance')
 const billingRouter = require('./routes/billing')
