@@ -20,10 +20,14 @@ async function getStudents() {
     return await runDBQuery(sql,[])
 }
 async function createStudent(data) {
-    const {first_name,last_name,phone} = data
-    sql = "insert into student (first_name, last_name, phone) values (?,?,?)"
-    params = [first_name,last_name,phone]
-    return await runDBQuery(sql,params)
+    const {first_name, last_name, phone} = data;
+    const insertSql = "INSERT INTO student (first_name, last_name, phone) VALUES (?, ?, ?)";
+    const insertParams = [first_name, last_name, phone];
+    const insertResult = await runDBQuery(insertSql, insertParams);
+    const selectSql = "SELECT * FROM student WHERE id = ?";
+    const selectParams = [insertResult.insertId];
+    const selectResult = await runDBQuery(selectSql, selectParams);
+    return Array.isArray(selectResult) ? selectResult[0] : selectResult;
 }
 async function updateStudent(data,id) {
     const {first_name,last_name,phone} = data

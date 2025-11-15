@@ -28,9 +28,13 @@ router.get('/', async (req,res) => {
     data = await studentController.getStudents()
     returnData(res,data)
 })
-router.post("/", async (req,res) => {
-    data = await studentController.createStudent(req.body)
-    returnData(res,data)
+router.post("/", async (req, res) => {
+    try {
+        const data = await studentController.createStudent(req.body)
+        returnData(res, data)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create student' })
+    }
 })
 router.patch("/:id", async (req,res) => {
     data = await studentController.updateStudent(req.body,req.params.id)
