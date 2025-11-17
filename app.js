@@ -32,7 +32,7 @@ app.use('/enrollment/',enrollmentRouter)
 app.use('/groups/',groupsRouter)
 app.use('/users/',userRouter)
 app.use('/billing/',billingRouter)
-app.use('/attendace/',attendanceRouter)
+app.use('/attendance/',attendanceRouter)
 
 app.listen(port, () => {
     console.log(`Academia Main backend running on port ${port}`)
