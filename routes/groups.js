@@ -45,5 +45,8 @@ router.post("/enroll/:group_id/:student_id", async (req,res) => {
     data = await groupController.enroll(req.params)
     returnDataAffectedRows(res,data)
 })
+router.delete("/disenroll/:group_id/:student_id", async (req,res) => {
+    data = await groupController.disenroll(req.params)
+})
 
 module.exports = router
