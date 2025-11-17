@@ -47,9 +47,19 @@ router.delete("/:id",async (req,res) => {
 })
 router.post("/:id/generate-receipt", async (req, res) => {
     try {
-        const attendanceId = req.params.id
-        const billingData = req.body
+        generateReceipt(req,res)
+    } catch (error) {
+        console.error('Receipt generation error:', error)
+        res.status(500).json({
+            error: 'Server error',
+            message: error.message || 'An error occurred while generating the receipt'
+        })
+    }
+})
 
+async function generateReceipt(req,res) {
+    const attendanceId = req.params.id
+        const billingData = req.body
         const result = await attendanceController.generateReceiptForAttendance(attendanceId, billingData)
 
         res.setHeader('Content-Type', 'application/pdf')
@@ -64,13 +74,6 @@ router.post("/:id/generate-receipt", async (req, res) => {
         }))
 
         res.send(result.pdfBuffer)
-    } catch (error) {
-        console.error('Receipt generation error:', error)
-        res.status(500).json({
-            error: 'Server error',
-            message: error.message || 'An error occurred while generating the receipt'
-        })
-    }
-})
+}
 
 module.exports = router

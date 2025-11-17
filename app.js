@@ -17,7 +17,12 @@ dotenv.config()
 const app = express()
 const port = 3000
 
-app.use(cors())
+var corsOptions = {
+    origin: 'http://academia.tokyohost.eu',
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(bodyparser.json())
 
