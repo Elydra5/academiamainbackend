@@ -13,10 +13,14 @@ async function runDBQuery(sql,params) {
 async function getGroup(id) {
     sql = "select * from course_group where id = ?"
     params = [id]
-    return await runDBQuery(sql,params)
+    const groupInfo =  await runDBQuery(sql,params)
+    sql = "select * from enrollments where group_id = ?"
+    params = [groupInfo[0].id]
+    const studentIds = await runDBQuery(sql,params)
+    sql = "select * from students where id in ("
 }
 async function getGroups() {
-    sql = "select * from course_group"
+    sql = "select id, name from course_group"
     return await runDBQuery(sql,[])
 }
 async function createGroup(data) {
@@ -35,11 +39,24 @@ async function deleteGroup(id) {
     sql = "delete from course_groups where id = ?"
     return await runDBQuery(sql,[id])
 }
+async function enroll(data) {
+    const {group_id,student_id} = data
+    sql  = "insert into enrollments (student_id, group_id) values (?,?)"
+    params = [student_id,group_id]
+    return await runDBQuery(sql,params)
+}
+async function undoEnroll(data) {
+    const {group_id,student_id} = data
+    sql  = "delete from enrollments group_id = ? && student_id = ?"
+    params = [student_id,group_id]
+    return await runDBQuery(sql,params)
+}
 
 module.exports = {
     getGroup,
     getGroups,
     deleteGroup,
     createGroup,
-    updateGroup
+    updateGroup,
+    enroll
 }

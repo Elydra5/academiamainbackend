@@ -10,13 +10,13 @@ async function runDBQuery(sql,params) {
     }
 }
 
-async function getUser(id) {
-    sql = "select username from users where username = ?"
-    params = [id]
+async function getUser(username) {
+    sql = "select username, role, first_name, last_name, email, moodle_id, last_login, status from users where username = ?"
+    params = [username]
     return await runDBQuery(sql,params)
 }
 async function getUsers() {
-    sql = "select username from users"
+    sql = "select username, first_name, last_name from users"
     return await runDBQuery(sql,[])
 }
 async function createUser(data) {
@@ -32,7 +32,7 @@ async function updateUser(data,id) {
     return await runDBQuery(sql,params)
 }
 async function deleteUser(id) {
-    sql = "delete from course_groups where id = ?"
+    sql = "delete from users where username = ?"
     return await runDBQuery(sql,[id])
 }
 

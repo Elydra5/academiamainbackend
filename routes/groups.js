@@ -11,7 +11,7 @@ function returnData(res,data) {
         res.json(404)
     }
 }
-function returnDataAffectedRows() {
+function returnDataAffectedRows(res,data) {
     if (data.affectedRows == 1) {
         res.json(data)
         res.status(200)
@@ -39,6 +39,10 @@ router.patch("/:id", async (req,res) => {
 router.delete("/:id",async (req,res) => {
     data = await groupController.deleteGroup(req.params.id)
     console.log(data)
+    returnDataAffectedRows(res,data)
+})
+router.post("/enroll/:group_id/:student_id", async (req,res) => {
+    data = await groupController.enroll(req.params)
     returnDataAffectedRows(res,data)
 })
 

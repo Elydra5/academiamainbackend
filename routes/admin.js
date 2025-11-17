@@ -20,8 +20,8 @@ function returnDataAffectedRows(res,data) {
     }
 }
 
-router.get('/:id',async (req,res) => {
-    data = await adminController.getUser(req.params.id)
+router.get('/:username',async (req,res) => {
+    data = await adminController.getUser(req.params.username)
     returnData(res,data)
 })
 router.get('/', async (req,res) => {
