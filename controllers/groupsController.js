@@ -20,15 +20,15 @@ async function getGroups() {
     return await runDBQuery(sql,[])
 }
 async function createGroup(data) {
-    const {name,short_description,moodle_id,start_date,end_date,status,teacher,long_description} = data
-    sql = "insert into course_groups (name, short_description, moodle_id, start_date, end_date, status, teacher, long_description) values (?,?,?,?,?,?,?,?)"
-    params = [fname,sname,phone]
+    const {name,short_description,moodle_id,end_date,teacher,long_description} = data
+    sql = "insert into course_group (name, short_description, moodle_id, end_date, teacher, long_description) values (?,?,?,?,?,?)"
+    params = [name,short_description,moodle_id,end_date,teacher,long_description]
     return await runDBQuery(sql,params)
 }
 async function updateGroup(data,id) {
     const {name,short_description,moodle_id,start_date,end_date,status,teacher,long_description} = data
-    sql = "update student set name = ?, short_description = ?, moodle_id = ?, start_date = ?, end_date = ?, status = ?, teacher = ?, long_description = ?"
-    params = [fname,sname,phone,id]
+    sql = "update course_group set name = ?, short_description = ?, moodle_id = ?, start_date = ?, end_date = ?, status = ?, teacher = ?, long_description = ?"
+    params = [name,short_description,moodle_id,start_date,end_date,status,teacher,long_description]
     return await runDBQuery(sql,params)
 }
 async function deleteGroup(id) {

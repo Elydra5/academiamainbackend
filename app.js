@@ -8,7 +8,7 @@ const adminRouter = require('./routes/admin')
 const studentRouter = require('./routes/student')
 const attendanceRouter = require('./routes/attendance')
 const billingRouter = require('./routes/billing')
-const enrollmentRouter = require('./routes/enrollmentS')
+const enrollmentRouter = require('./routes/enrollments')
 const groupsRouter = require('./routes/groups')
 const userRouter = require('./routes/users')
 
