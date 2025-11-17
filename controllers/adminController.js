@@ -11,12 +11,12 @@ async function runDBQuery(sql,params) {
 }
 
 async function getUser(id) {
-    sql = "select * from users where username = ?"
+    sql = "select username from users where username = ?"
     params = [id]
     return await runDBQuery(sql,params)
 }
 async function getUsers() {
-    sql = "select * from users"
+    sql = "select username from users"
     return await runDBQuery(sql,[])
 }
 async function createUser(data) {
