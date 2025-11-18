@@ -20,7 +20,7 @@ const app = express()
 const port = 3000
 
 var corsOptions = {
-    origin: 'http://academia.tokyohost.eu',
+    origin: 'https://academia.tokyohost.eu',
     optionsSuccessStatus: 200
 }
 
