@@ -14,6 +14,7 @@ const enrollmentRouter = require('./routes/enrollments')
 const groupsRouter = require('./routes/groups')
 const userRouter = require('./routes/users')
 const dashboardRouter = require('./routes/dashboard')
+const calendarRouter = require('./routes/calendar')
 
 dotenv.config()
 
@@ -47,6 +48,7 @@ app.use('/users/',userRouter)
 app.use('/billing/',billingRouter)
 app.use('/attendance/',attendanceRouter)
 app.use('/dashboard/',dashboardRouter)
+app.use('/calendar/',calendarRouter)
 
 https.createServer(options, app).listen(port, () => {
     console.log(`Academia backend running on HTTPS port ${port}`)
