@@ -2,6 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const bodyparser = require('body-parser')
+const fs = require('fs')
+const https = require('https')
 
 const authRouter = require('./routes/auth')
 const adminRouter = require('./routes/admin')
@@ -22,6 +24,11 @@ var corsOptions = {
     optionsSuccessStatus: 200
 }
 
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/academia.tokyohost.eu/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/academia.tokyohost.eu/fullchain.pem')
+}
+
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(bodyparser.json())
@@ -39,6 +46,6 @@ app.use('/users/',userRouter)
 app.use('/billing/',billingRouter)
 app.use('/attendance/',attendanceRouter)
 
-app.listen(port, () => {
-    console.log(`Academia Main backend running on port ${port}`)
+https.createServer(options, app).listen(port, () => {
+    console.log(`Academia backend running on HTTPS port ${port}`)
 })
