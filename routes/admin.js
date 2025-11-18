@@ -29,7 +29,7 @@ router.get('/', async (req,res) => {
     returnData(res,data)
 })
 router.post("/", async (req, res) => {
-    data = await adminController.createUser()
+    data = await adminController.createUser(req.body)
     returnData(res,data)
 })
 router.patch("/:id", async (req,res) => {

@@ -21,7 +21,7 @@ async function getUsers() {
 }
 async function createUser(data) {
     const {username,password,role,first_name,last_name,email,moodle_id,status} = data
-    sql = "insert into users (username,password,role,first_name,last_name,email,moodle_id,status) values (?,?,?,?,?,?)"
+    sql = "insert into users (username,password,role,first_name,last_name,email,moodle_id,status) values (?,?,?,?,?,?,?,?)"
     params = [username,password,role,first_name,last_name,email,moodle_id,status]
     return await runDBQuery(sql,params)
 }
