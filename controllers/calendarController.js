@@ -91,17 +91,23 @@ async function getEvents(startDate, endDate) {
         if (courseStarts && courseStarts.length > 0) {
             courseStarts.forEach(event => {
                 if (event.start_date) {
-                    const eventDate = new Date(event.start_date).toISOString().split('T')[0]
-                    events.push({
-                        id: `course_start_${event.id}`,
-                        title: `${event.name} - Kurzus kezdés`,
-                        description: event.short_description,
-                        date: eventDate,
-                        type: 'course_start',
-                        group_id: event.id,
-                        group_name: event.name,
-                        teacher: event.teacher
-                    })
+                    try {
+                        const eventDate = new Date(event.start_date).toISOString().split('T')[0]
+                        if (eventDate && eventDate !== 'Invalid Date') {
+                            events.push({
+                                id: `course_start_${event.id}`,
+                                title: `${event.name} - Inicio del curso`,
+                                description: event.short_description || '',
+                                date: eventDate,
+                                type: 'course_start',
+                                group_id: event.id,
+                                group_name: event.name,
+                                teacher: event.teacher
+                            })
+                        }
+                    } catch (e) {
+                        console.log('Error parsing start_date:', event.start_date, e)
+                    }
                 }
             })
         }
@@ -136,11 +142,11 @@ async function getEvents(startDate, endDate) {
                             }
                         }
                         
-                        if (eventDate && eventDate >= startDate && eventDate <= endDate) {
+                        if (eventDate && eventDate !== 'Invalid Date' && eventDate >= startDate && eventDate <= endDate) {
                             events.push({
                                 id: `course_end_${event.id}`,
-                                title: `${event.name} - Kurzus vége`,
-                                description: event.short_description,
+                                title: `${event.name} - Fin del curso`,
+                                description: event.short_description || '',
                                 date: eventDate,
                                 type: 'course_end',
                                 group_id: event.id,
@@ -174,20 +180,31 @@ async function getEvents(startDate, endDate) {
         
         if (paymentDeadlines && paymentDeadlines.length > 0) {
             paymentDeadlines.forEach(payment => {
-                events.push({
-                    id: `payment_${payment.receipt_number}`,
-                    title: `Fizetési határidő - ${payment.first_name} ${payment.last_name}`,
-                    description: `Összeg: ${payment.total_amount} HUF`,
-                    date: payment.period_end,
-                    type: 'payment_deadline',
-                    student_id: payment.student_id,
-                    receipt_number: payment.receipt_number,
-                    amount: parseFloat(payment.total_amount)
-                })
+                if (payment.period_end) {
+                    const paymentDate = payment.period_end instanceof Date 
+                        ? payment.period_end.toISOString().split('T')[0]
+                        : String(payment.period_end).split('T')[0]
+                    
+                    events.push({
+                        id: `payment_${payment.receipt_number}`,
+                        title: `Fecha límite de pago - ${payment.first_name || ''} ${payment.last_name || ''}`,
+                        description: `Importe: ${payment.total_amount} EUR`,
+                        date: paymentDate,
+                        type: 'payment_deadline',
+                        student_id: payment.student_id,
+                        receipt_number: payment.receipt_number,
+                        amount: parseFloat(payment.total_amount) || 0
+                    })
+                }
             })
         }
         
-        events.sort((a, b) => a.date.localeCompare(b.date))
+        events.sort((a, b) => {
+            if (!a.date && !b.date) return 0
+            if (!a.date) return 1
+            if (!b.date) return -1
+            return a.date.localeCompare(b.date)
+        })
         
         return events
     } catch (error) {
