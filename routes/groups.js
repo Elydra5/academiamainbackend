@@ -21,7 +21,12 @@ function returnDataAffectedRows(res,data) {
 }
 
 router.get('/:id',async (req,res) => {
-    data = await groupController.getGroup(req.params.id)
+    const id = req.params.id;
+    if (!id || id === 'undefined' || id === 'null') {
+        res.status(400).json({error: "Invalid group id"});
+        return;
+    }
+    data = await groupController.getGroup(id);
     if (data == null) {
         res.status(404).json({error: "Group not found"})
     } else {

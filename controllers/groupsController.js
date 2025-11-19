@@ -110,13 +110,17 @@ async function updateGroup(data,id) {
     const updateResult = await runDBQuery(sql,params)
     
     if (updateResult && updateResult.affectedRows > 0) {
+        console.log('[BACKEND] updateGroup: update successful, calling getGroup with numericId:', numericId);
         const groupData = await getGroup(numericId);
         if (!groupData) {
             console.error('[BACKEND ERROR] getGroup returned null after update for id:', numericId);
+        } else {
+            console.log('[BACKEND] updateGroup: getGroup returned data successfully');
         }
         return groupData;
     }
     
+    console.log('[BACKEND] updateGroup: update failed or no rows affected');
     return updateResult;
 }
 async function deleteGroup(id) {
