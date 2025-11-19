@@ -38,7 +38,7 @@ router.post("/", async (req,res) => {
 })
 router.patch("/:id", async (req,res) => {
     data = await groupController.updateGroup(req.body,req.params.id)
-    returnDataAffectedRows(res,data)
+    returnData(res,data)
 })
 router.delete("/:id",async (req,res) => {
     data = await groupController.deleteGroup(req.params.id)

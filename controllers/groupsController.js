@@ -85,7 +85,13 @@ async function updateGroup(data,id) {
     
     sql = "update course_group set name = ?, short_description = ?, moodle_id = ?, start_date = ?, end_date = ?, status = ?, teacher = ?, long_description = ? where id = ?"
     params = [name,short_description,moodle_id,formattedStartDate,formattedEndDate,status,teacher,long_description,id]
-    return await runDBQuery(sql,params)
+    const updateResult = await runDBQuery(sql,params)
+    
+    if (updateResult && updateResult.affectedRows > 0) {
+        return await getGroup(id);
+    }
+    
+    return updateResult;
 }
 async function deleteGroup(id) {
     sql = "delete from course_group where id = ?"
