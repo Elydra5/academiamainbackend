@@ -37,8 +37,18 @@ router.post("/", async (req,res) => {
     returnData(res,data)
 })
 router.patch("/:id", async (req,res) => {
-    data = await groupController.updateGroup(req.body,req.params.id)
-    returnData(res,data)
+    const id = req.params.id;
+    if (!id || id === 'undefined' || id === 'null') {
+        res.status(400).json({error: "Invalid group id"});
+        return;
+    }
+    
+    data = await groupController.updateGroup(req.body, id);
+    if (data == null) {
+        res.status(404).json({error: "Group not found or update failed"});
+    } else {
+        returnData(res, data);
+    }
 })
 router.delete("/:id",async (req,res) => {
     data = await groupController.deleteGroup(req.params.id)

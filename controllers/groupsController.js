@@ -18,8 +18,19 @@ function getQuestionMarks(number) {
 }
 
 async function getGroup(id) {
+    if (!id || id === 'undefined' || id === 'null') {
+        console.error('[BACKEND ERROR] getGroup called with invalid id:', id);
+        return null;
+    }
+    
+    const numericId = parseInt(id);
+    if (isNaN(numericId) || numericId <= 0) {
+        console.error('[BACKEND ERROR] getGroup called with non-numeric id:', id);
+        return null;
+    }
+    
     sql = "select * from course_group where id = ?"
-    params = [id]
+    params = [numericId]
     const groupInfo = await runDBQuery(sql,params)
 
     if (!groupInfo || groupInfo.length === 0 || !groupInfo[0]) {
@@ -60,6 +71,17 @@ async function createGroup(data) {
     return await runDBQuery(sql,params)
 }
 async function updateGroup(data,id) {
+    if (!id || id === 'undefined' || id === 'null') {
+        console.error('[BACKEND ERROR] updateGroup called with invalid id:', id);
+        return null;
+    }
+    
+    const numericId = parseInt(id);
+    if (isNaN(numericId) || numericId <= 0) {
+        console.error('[BACKEND ERROR] updateGroup called with non-numeric id:', id);
+        return null;
+    }
+    
     const {name,short_description,moodle_id,start_date,end_date,status,teacher,long_description} = data
 
     const formatDateForMySQL = (dateValue) => {
@@ -84,11 +106,15 @@ async function updateGroup(data,id) {
     const formattedEndDate = formatDateForMySQL(end_date);
     
     sql = "update course_group set name = ?, short_description = ?, moodle_id = ?, start_date = ?, end_date = ?, status = ?, teacher = ?, long_description = ? where id = ?"
-    params = [name,short_description,moodle_id,formattedStartDate,formattedEndDate,status,teacher,long_description,id]
+    params = [name,short_description,moodle_id,formattedStartDate,formattedEndDate,status,teacher,long_description,numericId]
     const updateResult = await runDBQuery(sql,params)
     
     if (updateResult && updateResult.affectedRows > 0) {
-        return await getGroup(id);
+        const groupData = await getGroup(numericId);
+        if (!groupData) {
+            console.error('[BACKEND ERROR] getGroup returned null after update for id:', numericId);
+        }
+        return groupData;
     }
     
     return updateResult;
