@@ -55,8 +55,30 @@ async function createGroup(data) {
 }
 async function updateGroup(data,id) {
     const {name,short_description,moodle_id,start_date,end_date,status,teacher,long_description} = data
+
+    const formatDateForMySQL = (dateValue) => {
+        if (!dateValue) return null;
+        if (dateValue === '') return null;
+        try {
+            const date = new Date(dateValue);
+            if (isNaN(date.getTime())) return null;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        } catch (e) {
+            if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+                return dateValue;
+            }
+            return null;
+        }
+    };
+    
+    const formattedStartDate = formatDateForMySQL(start_date);
+    const formattedEndDate = formatDateForMySQL(end_date);
+    
     sql = "update course_group set name = ?, short_description = ?, moodle_id = ?, start_date = ?, end_date = ?, status = ?, teacher = ?, long_description = ? where id = ?"
-    params = [name,short_description,moodle_id,start_date,end_date,status,teacher,long_description,id]
+    params = [name,short_description,moodle_id,formattedStartDate,formattedEndDate,status,teacher,long_description,id]
     return await runDBQuery(sql,params)
 }
 async function deleteGroup(id) {

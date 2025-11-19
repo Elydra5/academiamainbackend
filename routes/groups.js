@@ -12,11 +12,11 @@ function returnData(res,data) {
     }
 }
 function returnDataAffectedRows(res,data) {
-    if (data.affectedRows == 1) {
+    if (data != null && data.affectedRows == 1) {
         res.json(data)
         res.status(200)
     } else {
-        res.json(404)
+        res.status(404).json({error: "Not found or update failed"})
     }
 }
 
