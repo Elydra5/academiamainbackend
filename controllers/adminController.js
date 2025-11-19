@@ -53,7 +53,15 @@ async function updateUser(data,id) {
     sql = `update users set ${updates.join(', ')} where username = ?`;
     params.push(id);
     
-    return await runDBQuery(sql, params);
+    const updateResult = await runDBQuery(sql, params);
+    
+    if (updateResult && updateResult.affectedRows > 0) {
+        const updatedUsername = data.username || id;
+        const userData = await getUser(updatedUsername);
+        return Array.isArray(userData) && userData.length > 0 ? userData[0] : userData;
+    }
+    
+    return updateResult;
 }
 async function deleteUser(id) {
     sql = "delete from users where username = ?"
