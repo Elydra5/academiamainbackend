@@ -60,7 +60,7 @@ async function updateGroup(data,id) {
     return await runDBQuery(sql,params)
 }
 async function deleteGroup(id) {
-    sql = "delete from course_groups where id = ?"
+    sql = "delete from course_group where id = ?"
     return await runDBQuery(sql,[id])
 }
 async function enroll(data) {
