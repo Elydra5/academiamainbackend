@@ -35,21 +35,25 @@ async function createUser(data) {
     return await runDBQuery(sql,params)
 }
 async function updateUser(data,id) {
-    const {username,password,role,first_name,last_name,email,moodle_id,status} = data
-    sql = "update users set username = ?,password = ?,role = ?,first_name = ?,last_name = ?,email = ?,moodle_id = ?,status = ? where username = ?"
+    const allowedFields = ['username', 'password', 'role', 'first_name', 'last_name', 'email', 'moodle_id', 'status'];
+    const updates = [];
+    const params = [];
     
-    params = [
-        username ?? null,
-        password ?? null,
-        role ?? null,
-        first_name ?? null,
-        last_name ?? null,
-        email ?? null,
-        moodle_id ?? null,
-        status ?? null,
-        id
-    ]
-    return await runDBQuery(sql,params)
+    for (const field of allowedFields) {
+        if (data.hasOwnProperty(field)) {
+            updates.push(`${field} = ?`);
+            params.push(data[field] !== undefined ? data[field] : null);
+        }
+    }
+    
+    if (updates.length === 0) {
+        return null;
+    }
+    
+    sql = `update users set ${updates.join(', ')} where username = ?`;
+    params.push(id);
+    
+    return await runDBQuery(sql, params);
 }
 async function deleteUser(id) {
     sql = "delete from users where username = ?"
