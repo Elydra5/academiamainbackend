@@ -57,7 +57,6 @@ router.patch("/:id", async (req,res) => {
 })
 router.delete("/:id",async (req,res) => {
     data = await groupController.deleteGroup(req.params.id)
-    console.log(data)
     returnDataAffectedRows(res,data)
 })
 router.post("/enroll/:group_id/:student_id", async (req,res) => {

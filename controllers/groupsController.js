@@ -19,13 +19,11 @@ function getQuestionMarks(number) {
 
 async function getGroup(id) {
     if (!id || id === 'undefined' || id === 'null') {
-        console.error('[BACKEND ERROR] getGroup called with invalid id:', id);
         return null;
     }
     
     const numericId = parseInt(id);
     if (isNaN(numericId) || numericId <= 0) {
-        console.error('[BACKEND ERROR] getGroup called with non-numeric id:', id);
         return null;
     }
     
@@ -72,13 +70,11 @@ async function createGroup(data) {
 }
 async function updateGroup(data,id) {
     if (!id || id === 'undefined' || id === 'null') {
-        console.error('[BACKEND ERROR] updateGroup called with invalid id:', id);
         return null;
     }
     
     const numericId = parseInt(id);
     if (isNaN(numericId) || numericId <= 0) {
-        console.error('[BACKEND ERROR] updateGroup called with non-numeric id:', id);
         return null;
     }
     
@@ -110,17 +106,10 @@ async function updateGroup(data,id) {
     const updateResult = await runDBQuery(sql,params)
     
     if (updateResult && updateResult.affectedRows > 0) {
-        console.log('[BACKEND] updateGroup: update successful, calling getGroup with numericId:', numericId);
         const groupData = await getGroup(numericId);
-        if (!groupData) {
-            console.error('[BACKEND ERROR] getGroup returned null after update for id:', numericId);
-        } else {
-            console.log('[BACKEND] updateGroup: getGroup returned data successfully');
-        }
         return groupData;
     }
     
-    console.log('[BACKEND] updateGroup: update failed or no rows affected');
     return updateResult;
 }
 async function deleteGroup(id) {
@@ -128,13 +117,10 @@ async function deleteGroup(id) {
     return await runDBQuery(sql,[id])
 }
 async function enroll(data) {
-    console.log("enrolling student")
     const group_id = data.group_id
     const student_id = data.student_id
     sql = "select * from enrollments where student_id = ? && group_id = ?"
     params = [student_id,group_id]
-    console.log("Student:"+student_id)
-    console.log("Group:"+group_id)
     exists = await runDBQuery(sql,params)
     if (exists.length != 0) {
         return {affectedRows:0}
