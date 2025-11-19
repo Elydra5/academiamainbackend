@@ -20,13 +20,19 @@ function getQuestionMarks(number) {
 async function getGroup(id) {
     sql = "select * from course_group where id = ?"
     params = [id]
-    const groupInfo =  await runDBQuery(sql,params)
+    const groupInfo = await runDBQuery(sql,params)
+
+    if (!groupInfo || groupInfo.length === 0 || !groupInfo[0]) {
+        return null;
+    }
+
+    const group = groupInfo[0];
     sql = "select * from enrollments where group_id = ?"
-    params = [groupInfo[0].id]
+    params = [group.id]
     const studentIds = await runDBQuery(sql,params)
     if (studentIds.length == 0) {
         return {
-            groupInfo:groupInfo
+            groupInfo: group
         }
     }
     sql = "select * from student where id in ("+getQuestionMarks(studentIds.length)+")"
@@ -39,8 +45,8 @@ async function getGroup(id) {
     }
     const students = await runDBQuery(sql,getStudents())
     return {
-        groupInfo:groupInfo[0],
-        students:students
+        groupInfo: group,
+        students: students
     }
 }
 async function getGroups() {

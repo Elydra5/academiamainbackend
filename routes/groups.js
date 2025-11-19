@@ -22,7 +22,11 @@ function returnDataAffectedRows(res,data) {
 
 router.get('/:id',async (req,res) => {
     data = await groupController.getGroup(req.params.id)
-    returnData(res,data)
+    if (data == null) {
+        res.status(404).json({error: "Group not found"})
+    } else {
+        returnData(res,data)
+    }
 })
 router.get('/', async (req,res) => {
     data = await groupController.getGroups()
