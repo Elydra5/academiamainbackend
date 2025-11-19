@@ -22,13 +22,33 @@ async function getUsers() {
 async function createUser(data) {
     const {username,password,role,first_name,last_name,email,moodle_id,status} = data
     sql = "insert into users (username,password,role,first_name,last_name,email,moodle_id,status) values (?,?,?,?,?,?,?,?)"
-    params = [username,password,role,first_name,last_name,email,moodle_id,status]
+    params = [
+        username ?? null,
+        password ?? null,
+        role ?? null,
+        first_name ?? null,
+        last_name ?? null,
+        email ?? null,
+        moodle_id ?? null,
+        status ?? null
+    ]
     return await runDBQuery(sql,params)
 }
 async function updateUser(data,id) {
     const {username,password,role,first_name,last_name,email,moodle_id,status} = data
-    sql = "update users set username = ?,password = ?,role = ?,first_name = ?,last_name = ?,email = ?,moodle_id = ?,status = ?"
-    params = [username,password,role,first_name,last_name,email,moodle_id,status]
+    sql = "update users set username = ?,password = ?,role = ?,first_name = ?,last_name = ?,email = ?,moodle_id = ?,status = ? where username = ?"
+    
+    params = [
+        username ?? null,
+        password ?? null,
+        role ?? null,
+        first_name ?? null,
+        last_name ?? null,
+        email ?? null,
+        moodle_id ?? null,
+        status ?? null,
+        id
+    ]
     return await runDBQuery(sql,params)
 }
 async function deleteUser(id) {

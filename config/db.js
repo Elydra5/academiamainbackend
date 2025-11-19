@@ -9,6 +9,7 @@ async function query(sql, params){
     }
     catch(err){
         console.error(err)
+        return null
     }
     finally{
         await connection.end()
